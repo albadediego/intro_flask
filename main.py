@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 #Inicializar la variable app con Flask
 app = Flask(__name__)
@@ -31,11 +31,31 @@ def listaDic():
     return listaDic
 
 #Tomar parametro desde ruta
-@app.route("/nombre/<name>")
-def tuNombre(name):
-    return f"Hola {name}, como estas?"
+@app.route("/nombre/<name>/apellido/<apellido>")
+def tuNombre(name, apellido):
+    return f"Hola {name} {apellido}, como estas?"
 
 @app.route("/num/<int:parametro>")
 def cuadrado(parametro):
     #parametro = int(parametro)
     return f"El cuadrado de {parametro} es {parametro*parametro}"
+
+#Realizar una ruta que dinamicamente pueda solicitar o realizar operaciones
+#de suma, resta, multiplicacion y division segun 2 parametros numericos recibidos
+@app.route("/mates/<int:num1>/<int:num2>/<ope>")
+def operacionesMatematicas(num1, num2, ope):
+    result = None
+    if ope == 'suma':
+        result = f"La suma es: {num1 + num2}"
+    elif ope == 'resta':
+        result = f"La resta es: {num1 - num2}"
+    elif ope == 'multi':
+        result = f"La multiplicacion es: {num1 * num2}"
+    elif ope == 'divi':
+        result = f"La division es: {num1 / num2}"
+    return result
+
+@app.route("/<dato>")
+def miHtml(dato):
+    listaFrutas = ['platano', 'fresa', 'piña', 'manzana', 'melon']
+    return render_template("hola.html", variable = dato, frutas = listaFrutas)
